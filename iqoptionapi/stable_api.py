@@ -486,6 +486,23 @@ class IQ_Option:
     # ______________________________________________________
     #######################################################
 
+    def set_stream_candles_cb(self, cb):
+        self.api.stream_candles_cb = cb
+
+    def subscribe_candles(self, actives=[], size='all'):
+        if len(actives) >= 1:
+            for active in actives:
+                if size == "all":
+                    for s in self.size:
+                        self.api.subscribe(OP_code.ACTIVES[active], s)
+                else:
+                    self.api.subscribe(OP_code.ACTIVES[active], size)
+        else:
+            return {
+                "code": 'need_at_least_one_active',
+                "message": "You need specify at least one active"
+            }
+
     def start_candles_stream(self, ACTIVE, size, maxdict):
 
         if size == "all":

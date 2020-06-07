@@ -57,14 +57,13 @@ class WebsocketClient(object):
                 OP_code.ACTIVES.values()).index(message["msg"]["active_id"])]
 
             active = str(Active_name)
-            size = int(message["msg"]["size"])
-            from_ = int(message["msg"]["from"])
             msg = message["msg"]
-            maxdict = self.api.real_time_candles_maxdict_table[Active_name][size]
-
-            self.dict_queue_add(self.api.real_time_candles,
-                                maxdict, active, size, from_, msg)
-            self.api.candle_generated_check[active][size] = True
+            cb_data = {
+                "active": active,
+                **message["msg"]
+            }
+            if hasattr(self.api.stream_candles_cb, '__call__'):
+                self.api.stream_candles_cb(cb_data)
 
         elif message["name"] == "options":
             self.api.get_options_v2_data = message
