@@ -485,10 +485,27 @@ class IQ_Option:
     # _____________________REAL TIME CANDLE_________________
     # ______________________________________________________
     #######################################################
+    """ callback executed when any candle is received
 
+    Args:
+        cb (list): callback function. you can handle candles the way you want
+
+    Returns:
+        no returns
+    """
     def set_stream_candles_cb(self, cb):
         self.api.stream_candles_cb = cb
 
+    """subscribe to get candle streaming for all or one size
+
+    Args:
+        actives (list): assets list. Example: [USDJPY, EURUSD]
+        size (str): available sizes: all or one of: 1, 5, 10, 15, 30, 60, 120, 300, 600, 900, 1800,
+                     3600, 7200, 14400, 28800, 43200, 86400, 604800, 2592000
+
+    Returns:
+        returns only if no actives is passed
+    """
     def subscribe_candles(self, actives=[], size='all'):
         if len(actives) >= 1:
             for active in actives:
